@@ -1,0 +1,7 @@
+{
+  "editor.defaultFormatter": "biome.biome",
+  "editor.formatOnSave": true,
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
+}

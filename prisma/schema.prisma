@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Seo {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  keywords    String
+  image       String
+}
+
+model Hero {
+  id          String        @id @default(cuid())
+  titleTechs  String
+  title       String
+  about       String
+  socialMedia SocialMedia[] @relation("HeroSocialMedia")
+  techs       Tech[]        @relation("HeroTech")
+}
+
+model SocialMedia {
+  id     String @id @default(cuid())
+  name   String
+  url    String
+  title  String
+  image  String
+  heroId String
+  hero   Hero   @relation("HeroSocialMedia", fields: [heroId], references: [id])
+}
+
+model Tech {
+  id     String @id @default(cuid())
+  name   String
+  image  String
+  heroId String
+  hero   Hero   @relation("HeroTech", fields: [heroId], references: [id])
+}
