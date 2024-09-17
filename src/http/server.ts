@@ -1,15 +1,28 @@
 import fastify from "fastify";
 import fastifyCors from "@fastify/cors";
+import { createSeoRoute } from "./routes/create-seo";
+import {
+  serializerCompiler,
+  validatorCompiler,
+  ZodTypeProvider,
+} from "fastify-type-provider-zod";
+import { handleZodError } from "../middleware/zod-error";
+import { createHeroRoute } from "./routes/create-hero";
 
-const app = fastify();
+const app = fastify({
+  logger: true,
+}).withTypeProvider<ZodTypeProvider>();
 
 app.register(fastifyCors, {
   origin: "*",
 });
 
-app.get("/", async (request, reply) => {
-  return "Hello World";
-});
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
+
+handleZodError(app);
+app.register(createSeoRoute);
+app.register(createHeroRoute);
 
 app
   .listen({
